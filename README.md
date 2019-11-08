@@ -1,9 +1,8 @@
-# Fake Function Framework  (fff)
------------------------------
+# Fake Function Framework (fff)
 
-[![Build Status](https://travis-ci.org/meekrosoft/fff.svg?branch=master)](https://travis-ci.org/meekrosoft/fff)
-[![Build status](https://ci.appveyor.com/api/projects/status/md1gn8cxnjkrkq3b/branch/master?svg=true)](https://ci.appveyor.com/project/wulfgarpro/fff/branch/master)
-[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/wulfgarpro/fff?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
+---
+
+[![Build Status](https://travis-ci.com/ChiefGokhlayeh/fff.svg?branch=master)](https://travis-ci.com/ChiefGokhlayeh/fff)
 
 - [A Fake Function Framework for C](#a-fake-function-framework-for-c)
 - [Hello Fake World!](#hello-fake-world)
@@ -23,9 +22,11 @@
 - [Benefits](#benefits)
 - [Under the Hood](#under-the-hood)
 - [Cheat Sheet](#cheat-sheet)
+- [About this Fork](#about-this-fork)
 
 ## A Fake Function Framework for C
-fff is a micro-framework for creating fake C functions for tests.  Because life
+
+fff is a micro-framework for creating fake C functions for tests. Because life
 is too short to spend time hand-writing fake functions for testing.
 
 ## Hello Fake World!
@@ -59,13 +60,13 @@ TEST_F(GreeterTests, init_initialises_display)
 }
 ```
 
-So what has happened here?  The first thing to note is that the framework is
+So what has happened here? The first thing to note is that the framework is
 header only, all you need to do to use it is download `fff.h` and include
 it in your test suite.
 
-The magic is in the `FAKE_VOID_FUNC`.  This
+The magic is in the `FAKE_VOID_FUNC`. This
 expands a macro that defines a function returning `void`
-which has zero arguments.  It also defines a struct
+which has zero arguments. It also defines a struct
 `"function_name"_fake` which contains all the information about the fake.
 For instance, `DISPLAY_init_fake.call_count`is incremented every time the faked
 function is called.
@@ -84,7 +85,7 @@ DISPLAY_init_Fake DISPLAY_init_fake;
 
 ## Capturing Arguments
 
-Ok, enough with the toy examples.  What about faking functions with arguments?
+Ok, enough with the toy examples. What about faking functions with arguments?
 
 ```c
 // UI.c
@@ -111,10 +112,9 @@ TEST_F(UITests, write_line_outputs_lines_to_display)
 }
 ```
 
-
 There is no more magic here, the `FAKE_VOID_FUNC` works as in the
-previous example.  The number of arguments that the function takes is calculated,
- and the macro arguments following the function name defines the argument
+previous example. The number of arguments that the function takes is calculated,
+and the macro arguments following the function name defines the argument
 type (a char pointer in this example).
 
 A variable is created for every argument in the form
@@ -123,7 +123,7 @@ A variable is created for every argument in the form
 ## Return Values
 
 When you want to define a fake function that returns a value, you should use the
-`FAKE_VALUE_FUNC` macro.  For instance:
+`FAKE_VALUE_FUNC` macro. For instance:
 
 ```c
 // UI.c
@@ -167,11 +167,12 @@ you would use a syntax like this:
 ```c
 FAKE_VALUE_FUNC(double, pow, double, double);
 ```
+
 ## Resetting a Fake
 
 Good tests are isolated tests, so it is important to reset the fakes for each
-unit test.  All the fakes have a reset function to reset their arguments and
-call counts.  It is good practice is to call the reset function for all the
+unit test. All the fakes have a reset function to reset their arguments and
+call counts. It is good practice is to call the reset function for all the
 fakes in the setup function of your test suite.
 
 ```c
@@ -208,8 +209,9 @@ void setup()
 ```
 
 ## Call History
+
 Say you want to test that a function calls functionA, then functionB, then
-functionA again, how would you do that?  Well fff maintains a call
+functionA again, how would you do that? Well fff maintains a call
 history so that it is easy to assert these expectations.
 
 Here's how it works:
@@ -249,7 +251,7 @@ TEST_F(FFFTestSuite, when_fake_func_called_then_arguments_captured_in_history)
 }
 ```
 
-There are two ways to find out if calls have been dropped.  The first is to
+There are two ways to find out if calls have been dropped. The first is to
 check the dropped histories counter:
 
 ```c
@@ -291,8 +293,8 @@ override the default by defining it before include the `fff.h` like this:
 ## Function Return Value Sequences
 
 Often in testing we would like to test the behaviour of sequence of function call
-events.  One way to do this with fff is to specify a sequence of return values
-with for the fake function.  It is probably easier to describe with an example:
+events. One way to do this with fff is to specify a sequence of return values
+with for the fake function. It is probably easier to describe with an example:
 
 ```c
 // faking "long longfunc();"
@@ -311,14 +313,14 @@ TEST_F(FFFTestSuite, return_value_sequences_exhausted)
 ```
 
 By specifying a return value sequence using the `SET_RETURN_SEQ` macro,
-the fake will return the values given in the parameter array in sequence.  When
+the fake will return the values given in the parameter array in sequence. When
 the end of the sequence is reached the fake will continue to return the last
 value in the sequence indefinitely.
 
 ## Custom Return Value Delegate
 
 You can specify your own function to provide the return value for the fake. This
-is done by setting the `custom_fake` member of the fake.  Here's an example:
+is done by setting the `custom_fake` member of the fake. Here's an example:
 
 ```c
 #define MEANING_OF_LIFE 42
@@ -419,7 +421,7 @@ could call the real `fprintf()` like this:
       return vfprintf(stream, format, ap);
     }
 
-Just like  [return value delegates](#custom-return-value-delegate-sequences), you can also specify sequences for variadic functions using `SET_CUSTOM_FAKE_SEQ`.
+Just like [return value delegates](#custom-return-value-delegate-sequences), you can also specify sequences for variadic functions using `SET_CUSTOM_FAKE_SEQ`.
 See the test files for examples.
 
 ## Common Questions
@@ -443,7 +445,7 @@ FAKE_VALUE_FUNC(long, __cdecl, longfunc0);
 
 ### How do I fake a function that returns a value by reference?
 
-The basic mechanism that fff provides you in this case is the custom_fake field described in the *Custom Return Value Delegate* example above.
+The basic mechanism that fff provides you in this case is the custom*fake field described in the \_Custom Return Value Delegate* example above.
 
 You need to create a custom function (e.g. getTime_custom_fake) to produce the output optionally by use of a helper variable (e.g. getTime_custom_now) to retrieve that output from. Then some creativity to tie it all together. The most important part (IMHO) is to keep your test case readable and maintainable.
 
@@ -493,7 +495,7 @@ typedef int timer_handle;
 extern int timer_start(timer_handle handle, long delay, void (*cb_function) (int arg), int arg);
 ```
 
-Then creating a fake like below will horribly fail when trying to compile because the fff macro will internally expand into an illegal variable ```int (*)(int) arg2_val```.
+Then creating a fake like below will horribly fail when trying to compile because the fff macro will internally expand into an illegal variable `int (*)(int) arg2_val`.
 
 ```c
 /* The fake, attempt one */
@@ -600,14 +602,16 @@ You can specify GCC function attributes for your fakes using the `FFF_GCC_FUNCTI
 
 ### Weak Functions
 
-One usful attribute is the _weak_ attribute that marks a function such that it can be overridden by a non-weak variant at link time.  Using weak functions in combination with fff can help simplify your testing approach.
+One usful attribute is the _weak_ attribute that marks a function such that it can be overridden by a non-weak variant at link time. Using weak functions in combination with fff can help simplify your testing approach.
 
 For example:
-* Define a library of fake functions, e.g. libfake.a.
-* Link a binary (you might have many) that defines a subset of real variants of the fake functions to the aforementioned fake library.
-* This has the benefit of allowing a binary to selectively use a subset of the required fake functions while testing the real variants without the need for many different make targets.
+
+- Define a library of fake functions, e.g. libfake.a.
+- Link a binary (you might have many) that defines a subset of real variants of the fake functions to the aforementioned fake library.
+- This has the benefit of allowing a binary to selectively use a subset of the required fake functions while testing the real variants without the need for many different make targets.
 
 You can mark all fakes with the weak attribute like so:
+
 ```
 #define FFF_GCC_FUNCTION_ATTRIBUTES __attribute__((weak))
 #include "fff.h"
@@ -620,28 +624,37 @@ See the example project that demonstrates the above approach: _./examples/weak_l
 Look under the examples directory for full length examples in both C and C++.
 There is also a test suite for the framework under the test directory.
 
--------------------------
+---
 
 ## Benefits
+
 So whats the point?
 
- * To make it easy to create fake functions for testing C code.
- * It is simple - just include a header file and you are good to go.
- * To work in both C and C++ test environments
-
+- To make it easy to create fake functions for testing C code.
+- It is simple - just include a header file and you are good to go.
+- To work in both C and C++ test environments
 
 ## Under the Hood
- * The fff.h header file is generated by a ruby script
- * There are tests under _./test_
- * There is an example for testing an embedded UI and a hardware driver under _./examples_
- * There is an example of weak_linking under _./examples_
 
+- The fff.h header file is generated by a ruby script
+- There are tests under _./test_
+- There is an example for testing an embedded UI and a hardware driver under _./examples_
+- There is an example of weak*linking under *./examples\_
 
 ## Cheat Sheet
-| Macro | Description | Example |
-|-------|-------------|---------|
-| FAKE_VOID_FUNC(fn [,arg_types*]); | Define a fake function named fn returning void with n arguments | FAKE_VOID_FUNC(DISPLAY_output_message, const char*); |
-| FAKE_VALUE_FUNC(return_type, fn [,arg_types*]); | Define a fake function returning a value with type return_type taking n arguments | FAKE_VALUE_FUNC(int, DISPLAY_get_line_insert_index); |
-| FAKE_VOID_FUNC_VARARG(fn [,arg_types*], ...); | Define a fake variadic function returning void with type return_type taking n arguments and n variadic arguments | FAKE_VOID_FUNC_VARARG(fn, const char*, ...) |
+
+| Macro                                                       | Description                                                                                                         | Example                                                       |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| FAKE_VOID_FUNC(fn [,arg_types*]);                           | Define a fake function named fn returning void with n arguments                                                     | FAKE_VOID_FUNC(DISPLAY_output_message, const char\*);         |
+| FAKE_VALUE_FUNC(return_type, fn [,arg_types*]);             | Define a fake function returning a value with type return_type taking n arguments                                   | FAKE_VALUE_FUNC(int, DISPLAY_get_line_insert_index);          |
+| FAKE_VOID_FUNC_VARARG(fn [,arg_types*], ...);               | Define a fake variadic function returning void with type return_type taking n arguments and n variadic arguments    | FAKE_VOID_FUNC_VARARG(fn, const char\*, ...)                  |
 | FAKE_VALUE_FUNC_VARARG(return_type, fn [,arg_types*], ...); | Define a fake variadic function returning a value with type return_type taking n arguments and n variadic arguments | FAKE_VALUE_FUNC_VARARG(int, fprintf, FILE*, const char*, ...) |
-| RESET_FAKE(fn); | Reset the state of fake function called fn | RESET_FAKE(DISPLAY_init); |
+| RESET_FAKE(fn);                                             | Reset the state of fake function called fn                                                                          | RESET_FAKE(DISPLAY_init);                                     |
+| FFF_RESET_CALLED_FAKES();                                   | Reset the state of all called fake functions globally                                                               | FFF_RESET_CALLED_FAKES();                                     |
+
+## About this Fork
+
+This work is forked from the official [meekrosoft/fff](https://github.com/meekrosoft/fff) project.
+Changes include:
+
+- Add `FFF_RESET_CALLED_FAKES()` macro for convenient reset of all called fake functions

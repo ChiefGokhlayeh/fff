@@ -37,18 +37,18 @@ FAKE_VOID_FUNC(__cdecl, voidfunc20, int, int, int, int, int, int, int, int, int,
 FAKE_VALUE_FUNC(int, __cdecl, valuefunc20, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int);
 #endif
 
-class FFFTestSuite: public testing::Test
+class FFFTestSuite : public testing::Test
 {
 public:
     void SetUp()
     {
-        RESET_FAKE(voidfunc1);
-        RESET_FAKE(voidfunc2);
-        RESET_FAKE(longfunc0);
-        RESET_FAKE(voidfunc1outparam);
-        RESET_FAKE(voidfunc3var);
-        RESET_FAKE(valuefunc3var);
+        FFF_RESET_CALLED_FAKES();
         FFF_RESET_HISTORY();
+        RESET_FAKE(voidfunc2); /* Explicitly reset voidfunc2 so arg_history_len
+                                * is set. voidfunc2 is never actually called so
+                                * FFF_RESET_CALLED_FAKES() does not reset it.
+                                * Not doing so would trip assertion in test:
+                                * default_constants_can_be_overridden */
     }
 };
 
@@ -63,20 +63,20 @@ TEST_F(FFFTestSuite, default_constants_can_be_overridden)
 // before the fake is declared
 namespace cxx
 {
-    typedef int int_t;
-    void voidfunc1(cxx::int_t);
-}
+typedef int int_t;
+void voidfunc1(cxx::int_t);
+} // namespace cxx
 
 // Now declare the fake.  Must be in the same namespace as the
 // original declaration.
 namespace cxx
 {
 #ifndef TEST_WITH_CALLING_CONVENTIONS
-    FAKE_VOID_FUNC(voidfunc1, cxx::int_t);
+FAKE_VOID_FUNC(voidfunc1, cxx::int_t);
 #else
-    FAKE_VOID_FUNC(_cdecl, voidfunc1, cxx::int_t);
+FAKE_VOID_FUNC(_cdecl, voidfunc1, cxx::int_t);
 #endif
-}
+} // namespace cxx
 
 TEST_F(FFFTestSuite, cxx_fake_is_called)
 {
