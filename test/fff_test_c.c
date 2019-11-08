@@ -13,10 +13,13 @@
 #include <stdio.h>
 #include <string.h>
 
-
-
-enum MYBOOL { FALSE = 899, TRUE };
-struct MyStruct {
+enum MYBOOL
+{
+    FALSE = 899,
+    TRUE
+};
+struct MyStruct
+{
     int x;
     int y;
 };
@@ -30,7 +33,7 @@ FAKE_VALUE_FUNC(enum MYBOOL, enumfunc0);
 FAKE_VALUE_FUNC(struct MyStruct, structfunc0);
 FAKE_VOID_FUNC_VARARG(voidfunc3var, const char *, int, ...);
 FAKE_VALUE_FUNC_VARARG(int, valuefunc3var, const char *, int, ...);
-FAKE_VALUE_FUNC(int, strlcpy3, char* const, const char* const, const size_t);
+FAKE_VALUE_FUNC(int, strlcpy3, char *const, const char *const, const size_t);
 FAKE_VOID_FUNC(voidfunc20, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int);
 FAKE_VALUE_FUNC(int, valuefunc20, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int);
 #else
@@ -42,25 +45,16 @@ FAKE_VALUE_FUNC(enum MYBOOL, __cdecl, enumfunc0);
 FAKE_VALUE_FUNC(struct MyStruct, __cdecl, structfunc0);
 FAKE_VOID_FUNC_VARARG(__cdecl, voidfunc3var, char *, int, ...);
 FAKE_VALUE_FUNC_VARARG(int, __cdecl, valuefunc3var, char *, int, ...);
-FAKE_VALUE_FUNC(int, __cdecl, strlcpy3, char* const, const char* const, const size_t);
+FAKE_VALUE_FUNC(int, __cdecl, strlcpy3, char *const, const char *const, const size_t);
 FAKE_VOID_FUNC(__cdecl, voidfunc20, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int);
 FAKE_VALUE_FUNC(int, __cdecl, valuefunc20, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int);
 #endif
 
 void setup()
 {
-    RESET_FAKE(voidfunc1);
-    RESET_FAKE(voidfunc2);
-    RESET_FAKE(voidfunc1outparam);
-    RESET_FAKE(longfunc0);
-    RESET_FAKE(enumfunc0);
-    RESET_FAKE(structfunc0);
-    RESET_FAKE(voidfunc3var);
-    RESET_FAKE(valuefunc3var);
-    RESET_FAKE(strlcpy3);
+    FFF_RESET_CALLED_FAKES();
     FFF_RESET_HISTORY();
 }
-
 
 #include "test_cases.include"
 
